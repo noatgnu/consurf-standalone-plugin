@@ -1,0 +1,28 @@
+[project]
+name = "consurf-standalone-plugin"
+version = "1.0.0"
+description = "CauldronGO plugin for protein sequence conservation analysis using ConSurf standalone tools"
+authors = [
+    {name = "Toan Phung", email = "toan.phung@proteo.info"}
+]
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["bioinformatics", "protein", "conservation", "consurf", "cauldrongo", "plugin"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/noatgnu/consurf-standalone-plugin"
+Repository = "https://github.com/noatgnu/consurf-standalone-plugin"
+Issues = "https://github.com/noatgnu/consurf-standalone-plugin/issues"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

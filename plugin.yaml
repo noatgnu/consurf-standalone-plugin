@@ -1,0 +1,212 @@
+plugin:
+  id: "consurf-conservation"
+  name: "ConSurf Conservation Analysis"
+  description: "Protein sequence conservation analysis using ConSurf standalone. Identifies conserved and variable regions in protein sequences based on homology search and multiple sequence alignment."
+  version: "1.0.0"
+  author: "Toan Phung"
+  category: "analysis"
+  subcategory: "protein-conservation"
+  icon: "biotech"
+  repository: "https://github.com/noatgnu/consurf-standalone-plugin"
+
+runtime:
+  environments: ["docker"]
+  entrypoint: "/opt/miniconda/bin/conda run -n consurf_env --no-capture-output python /workspace/stand_alone_consurf/stand_alone_consurf.py"
+  docker:
+    image: "noatgnu/consurf-alone:0.0.2"
+    platform: "linux/amd64"
+
+inputs:
+  - name: "query_sequence"
+    label: "Query Protein Sequence"
+    type: "file"
+    required: true
+    accept: ".fasta,.fa,.faa"
+    description: "Protein sequence in FASTA format for conservation analysis"
+
+  - name: "fasta_database"
+    label: "Protein FASTA Database"
+    type: "file"
+    required: true
+    accept: ".fasta,.fa,.faa"
+    description: "Database of protein sequences for homolog search (e.g., UniRef90, UniProt)"
+
+  - name: "algorithm"
+    label: "Homolog Search Algorithm"
+    type: "select"
+    required: true
+    default: "HMMER"
+    options: ["HMMER", "BLAST"]
+    description: "Algorithm for searching homologous sequences"
+
+  - name: "max_homologs"
+    label: "Maximum Homologs"
+    type: "number"
+    required: true
+    default: 150
+    min: 10
+    max: 500
+    step: 10
+    description: "Maximum number of homologous sequences to include in MSA"
+
+  - name: "substitution_model"
+    label: "Substitution Model"
+    type: "select"
+    required: true
+    default: "BEST"
+    options: ["BEST", "JTT", "LG", "WAG", "cpREV", "mtREV", "Dayhoff"]
+    description: "Amino acid substitution model for conservation calculation"
+
+  - name: "max_id"
+    label: "Maximum Sequence Identity (%)"
+    type: "number"
+    required: true
+    default: 95
+    min: 50
+    max: 100
+    step: 5
+    description: "Maximum sequence identity threshold for homolog filtering"
+
+  - name: "min_id"
+    label: "Minimum Sequence Identity (%)"
+    type: "number"
+    required: true
+    default: 35
+    min: 1
+    max: 50
+    step: 5
+    description: "Minimum sequence identity threshold for homolog filtering"
+
+  - name: "cutoff"
+    label: "E-value Cutoff"
+    type: "number"
+    required: true
+    default: 0.0001
+    min: 0.00001
+    max: 1
+    step: 0.00001
+    description: "E-value threshold for homolog search significance"
+
+  - name: "max_iterations"
+    label: "Maximum Iterations"
+    type: "number"
+    required: true
+    default: 1
+    min: 1
+    max: 5
+    step: 1
+    description: "Number of PSI-BLAST iterations (if BLAST selected)"
+
+  - name: "maximum_likelihood"
+    label: "Use Maximum Likelihood"
+    type: "boolean"
+    required: false
+    default: false
+    description: "Use maximum likelihood method for rate calculation (slower but more accurate)"
+
+  - name: "closest"
+    label: "Use Closest Homologs Only"
+    type: "boolean"
+    required: false
+    default: false
+    description: "Select only the closest homologs based on similarity"
+
+  - name: "msa_file"
+    label: "Multiple Sequence Alignment (Optional)"
+    type: "file"
+    required: false
+    accept: ".aln,.fasta,.fa,.clustal"
+    description: "Pre-computed MSA file. If provided, skips homolog search and alignment steps"
+
+  - name: "alignment_program"
+    label: "Alignment Program"
+    type: "select"
+    required: false
+    options: ["MAFFT", "MUSCLE", "CLUSTALW"]
+    description: "Program for multiple sequence alignment (used if MSA not provided)"
+
+  - name: "structure_file"
+    label: "PDB Structure File (Optional)"
+    type: "file"
+    required: false
+    accept: ".pdb,.ent"
+    description: "Protein structure file for mapping conservation to 3D structure"
+
+  - name: "chain"
+    label: "PDB Chain ID"
+    type: "text"
+    required: false
+    placeholder: "A"
+    description: "Chain identifier in PDB file (e.g., A, B, C)"
+
+  - name: "query_name"
+    label: "Query Sequence Name"
+    type: "text"
+    required: false
+    placeholder: "MyProtein"
+    description: "Custom name for the query sequence in outputs"
+
+outputs:
+  - name: "consurf_outputs"
+    path: "Consurf_Outputs.zip"
+    type: "data"
+    description: "Complete ConSurf analysis results archive"
+    format: "zip"
+
+  - name: "conservation_grades"
+    path: "*_consurf_grades.txt"
+    type: "data"
+    description: "Per-residue conservation grades and scores"
+    format: "txt"
+
+  - name: "msa_variety"
+    path: "msa_aa_variety_percentage.csv"
+    type: "data"
+    description: "Amino acid variation percentage at each position in MSA"
+    format: "csv"
+
+  - name: "query_copy"
+    path: "query.fasta"
+    type: "data"
+    description: "Copy of input query sequence"
+    format: "fasta"
+
+execution:
+  argsMapping:
+    query_sequence: "--seq"
+    fasta_database: "--DB"
+    algorithm: "--algorithm"
+    max_homologs: "--MAX_HOMOLOGS"
+    substitution_model: "--model"
+    max_id: "--MAX_ID"
+    min_id: "--MIN_ID"
+    cutoff: "--cutoff"
+    max_iterations: "--iterations"
+    maximum_likelihood:
+      flag: "--Maximum_Likelihood"
+      when: "true"
+    closest:
+      flag: "--closest"
+      when: "true"
+    msa_file: "--msa"
+    alignment_program: "--align"
+    structure_file: "--structure"
+    chain: "--chain"
+    query_name: "--query"
+  outputDir: "--dir"
+  requirements:
+    python: ">=3.8"
+
+example:
+  enabled: true
+  values:
+    query_sequence: "example/query.fasta"
+    fasta_database: "example/small_database.fasta"
+    algorithm: "HMMER"
+    max_homologs: 50
+    substitution_model: "BEST"
+    max_id: 95
+    min_id: 35
+    cutoff: 0.0001
+    max_iterations: 1
+    maximum_likelihood: false

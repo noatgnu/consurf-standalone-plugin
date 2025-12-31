@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plugin Documentation</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        h1 {
+            border-bottom: 2px solid #2196f3;
+            padding-bottom: 10px;
+            color: #1976d2;
+        }
+        h2 {
+            margin-top: 30px;
+            color: #1976d2;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 5px;
+        }
+        h3 {
+            margin-top: 20px;
+            color: #424242;
+        }
+        h4 {
+            color: #616161;
+        }
+        a {
+            color: #2196f3;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        blockquote {
+            border-left: 4px solid #2196f3;
+            margin: 0;
+            padding-left: 15px;
+            color: #666;
+            background: #f5f9fc;
+            padding: 10px 15px;
+            border-radius: 4px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #2196f3;
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        ul, ol {
+            padding-left: 25px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        strong {
+            font-weight: 600;
+            color: #1976d2;
+        }
+        .mermaid {
+            text-align: center;
+            margin: 20px 0;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+<h1 id="consurf-conservation-analysis">ConSurf Conservation Analysis</h1>
+<h2 id="installation">Installation</h2>
+<p><a href="cauldron://install?repo=https%3A%2F%2Fgithub.com%2Fnoatgnu%2Fconsurf-standalone-plugin">⬇️ <strong>Click here to install in Cauldron</strong></a></p>
+<blockquote>
+<p><strong>Repository</strong>: <code>https://github.com/noatgnu/consurf-standalone-plugin</code></p>
+</blockquote>
+<p><strong>Manual installation:</strong></p>
+<ol>
+<li>Open Cauldron</li>
+<li>Go to <strong>Plugins</strong> → <strong>Install from Repository</strong></li>
+<li>Paste: <code>https://github.com/noatgnu/consurf-standalone-plugin</code></li>
+<li>Click <strong>Install</strong></li>
+</ol>
+<p><strong>ID</strong>: <code>consurf-conservation</code><br>
+<strong>Version</strong>: 1.0.0<br>
+<strong>Category</strong>: analysis<br>
+<strong>Author</strong>: Toan Phung</p>
+<h2 id="description">Description</h2>
+<p>Protein sequence conservation analysis using ConSurf standalone. Identifies conserved and variable regions in protein sequences based on homology search and multiple sequence alignment.</p>
+<h2 id="runtime">Runtime</h2>
+<ul>
+<li>
+<p><strong>Environments</strong>: <code>docker</code></p>
+</li>
+<li>
+<p><strong>Entrypoint</strong>: <code>/opt/miniconda/bin/conda run -n consurf_env --no-capture-output python /workspace/stand_alone_consurf/stand_alone_consurf.py</code></p>
+</li>
+</ul>
+<h2 id="inputs">Inputs</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Label</th>
+<th>Type</th>
+<th>Required</th>
+<th>Default</th>
+<th>Visibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>query_sequence</code></td>
+<td>Query Protein Sequence</td>
+<td>file</td>
+<td>Yes</td>
+<td>-</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>fasta_database</code></td>
+<td>Protein FASTA Database</td>
+<td>file</td>
+<td>Yes</td>
+<td>-</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>algorithm</code></td>
+<td>Homolog Search Algorithm</td>
+<td>select (HMMER, BLAST)</td>
+<td>Yes</td>
+<td>HMMER</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>max_homologs</code></td>
+<td>Maximum Homologs</td>
+<td>number (min: 10, max: 500, step: 10)</td>
+<td>Yes</td>
+<td>150</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>substitution_model</code></td>
+<td>Substitution Model</td>
+<td>select (BEST, JTT, LG, WAG, cpREV, mtREV, Dayhoff)</td>
+<td>Yes</td>
+<td>BEST</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>max_id</code></td>
+<td>Maximum Sequence Identity (%)</td>
+<td>number (min: 50, max: 100, step: 5)</td>
+<td>Yes</td>
+<td>95</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>min_id</code></td>
+<td>Minimum Sequence Identity (%)</td>
+<td>number (min: 1, max: 50, step: 5)</td>
+<td>Yes</td>
+<td>35</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>cutoff</code></td>
+<td>E-value Cutoff</td>
+<td>number (min: 0, max: 1, step: 0)</td>
+<td>Yes</td>
+<td>0.0001</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>max_iterations</code></td>
+<td>Maximum Iterations</td>
+<td>number (min: 1, max: 5, step: 1)</td>
+<td>Yes</td>
+<td>1</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>maximum_likelihood</code></td>
+<td>Use Maximum Likelihood</td>
+<td>boolean</td>
+<td>No</td>
+<td>false</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>closest</code></td>
+<td>Use Closest Homologs Only</td>
+<td>boolean</td>
+<td>No</td>
+<td>false</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>msa_file</code></td>
+<td>Multiple Sequence Alignment (Optional)</td>
+<td>file</td>
+<td>No</td>
+<td>-</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>alignment_program</code></td>
+<td>Alignment Program</td>
+<td>select (MAFFT, MUSCLE, CLUSTALW)</td>
+<td>No</td>
+<td>-</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>structure_file</code></td>
+<td>PDB Structure File (Optional)</td>
+<td>file</td>
+<td>No</td>
+<td>-</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>chain</code></td>
+<td>PDB Chain ID</td>
+<td>text</td>
+<td>No</td>
+<td>-</td>
+<td>Always visible</td>
+</tr>
+<tr>
+<td><code>query_name</code></td>
+<td>Query Sequence Name</td>
+<td>text</td>
+<td>No</td>
+<td>-</td>
+<td>Always visible</td>
+</tr>
+</tbody>
+</table>
+<h3 id="input-details">Input Details</h3>
+<h4 id="query-protein-sequence-query-sequence">Query Protein Sequence (<code>query_sequence</code>)</h4>
+<p>Protein sequence in FASTA format for conservation analysis</p>
+<h4 id="protein-fasta-database-fasta-database">Protein FASTA Database (<code>fasta_database</code>)</h4>
+<p>Database of protein sequences for homolog search (e.g., UniRef90, UniProt)</p>
+<h4 id="homolog-search-algorithm-algorithm">Homolog Search Algorithm (<code>algorithm</code>)</h4>
+<p>Algorithm for searching homologous sequences</p>
+<ul>
+<li><strong>Options</strong>: <code>HMMER</code>, <code>BLAST</code></li>
+</ul>
+<h4 id="maximum-homologs-max-homologs">Maximum Homologs (<code>max_homologs</code>)</h4>
+<p>Maximum number of homologous sequences to include in MSA</p>
+<h4 id="substitution-model-substitution-model">Substitution Model (<code>substitution_model</code>)</h4>
+<p>Amino acid substitution model for conservation calculation</p>
+<ul>
+<li><strong>Options</strong>: <code>BEST</code>, <code>JTT</code>, <code>LG</code>, <code>WAG</code>, <code>cpREV</code>, <code>mtREV</code>, <code>Dayhoff</code></li>
+</ul>
+<h4 id="maximum-sequence-identity--max-id">Maximum Sequence Identity (%) (<code>max_id</code>)</h4>
+<p>Maximum sequence identity threshold for homolog filtering</p>
+<h4 id="minimum-sequence-identity--min-id">Minimum Sequence Identity (%) (<code>min_id</code>)</h4>
+<p>Minimum sequence identity threshold for homolog filtering</p>
+<h4 id="e-value-cutoff-cutoff">E-value Cutoff (<code>cutoff</code>)</h4>
+<p>E-value threshold for homolog search significance</p>
+<h4 id="maximum-iterations-max-iterations">Maximum Iterations (<code>max_iterations</code>)</h4>
+<p>Number of PSI-BLAST iterations (if BLAST selected)</p>
+<h4 id="use-maximum-likelihood-maximum-likelihood">Use Maximum Likelihood (<code>maximum_likelihood</code>)</h4>
+<p>Use maximum likelihood method for rate calculation (slower but more accurate)</p>
+<h4 id="use-closest-homologs-only-closest">Use Closest Homologs Only (<code>closest</code>)</h4>
+<p>Select only the closest homologs based on similarity</p>
+<h4 id="multiple-sequence-alignment-optional-msa-file">Multiple Sequence Alignment (Optional) (<code>msa_file</code>)</h4>
+<p>Pre-computed MSA file. If provided, skips homolog search and alignment steps</p>
+<h4 id="alignment-program-alignment-program">Alignment Program (<code>alignment_program</code>)</h4>
+<p>Program for multiple sequence alignment (used if MSA not provided)</p>
+<ul>
+<li><strong>Options</strong>: <code>MAFFT</code>, <code>MUSCLE</code>, <code>CLUSTALW</code></li>
+</ul>
+<h4 id="pdb-structure-file-optional-structure-file">PDB Structure File (Optional) (<code>structure_file</code>)</h4>
+<p>Protein structure file for mapping conservation to 3D structure</p>
+<h4 id="pdb-chain-id-chain">PDB Chain ID (<code>chain</code>)</h4>
+<p>Chain identifier in PDB file (e.g., A, B, C)</p>
+<ul>
+<li><strong>Placeholder</strong>: <code>A</code></li>
+</ul>
+<h4 id="query-sequence-name-query-name">Query Sequence Name (<code>query_name</code>)</h4>
+<p>Custom name for the query sequence in outputs</p>
+<ul>
+<li><strong>Placeholder</strong>: <code>MyProtein</code></li>
+</ul>
+<h2 id="outputs">Outputs</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>File</th>
+<th>Type</th>
+<th>Format</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>consurf_outputs</code></td>
+<td><code>Consurf_Outputs.zip</code></td>
+<td>data</td>
+<td>zip</td>
+<td>Complete ConSurf analysis results archive</td>
+</tr>
+<tr>
+<td><code>conservation_grades</code></td>
+<td><code>*_consurf_grades.txt</code></td>
+<td>data</td>
+<td>txt</td>
+<td>Per-residue conservation grades and scores</td>
+</tr>
+<tr>
+<td><code>msa_variety</code></td>
+<td><code>msa_aa_variety_percentage.csv</code></td>
+<td>data</td>
+<td>csv</td>
+<td>Amino acid variation percentage at each position in MSA</td>
+</tr>
+<tr>
+<td><code>query_copy</code></td>
+<td><code>query.fasta</code></td>
+<td>data</td>
+<td>fasta</td>
+<td>Copy of input query sequence</td>
+</tr>
+</tbody>
+</table>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li><strong>Python Version</strong>: &gt;=3.8</li>
+</ul>
+<h2 id="example-data">Example Data</h2>
+<p>This plugin includes example data for testing:</p>
+<pre><code class="language-yaml">  fasta_database: example/small_database.fasta
+  max_homologs: 50
+  substitution_model: BEST
+  max_id: 95
+  min_id: 35
+  cutoff: 0.0001
+  maximum_likelihood: false
+  query_sequence: example/query.fasta
+  algorithm: HMMER
+  max_iterations: 1
+</code></pre>
+<p>Load example data by clicking the <strong>Load Example</strong> button in the UI.</p>
+<h2 id="usage">Usage</h2>
+<h3 id="via-ui">Via UI</h3>
+<ol>
+<li>Navigate to <strong>analysis</strong> → <strong>ConSurf Conservation Analysis</strong></li>
+<li>Fill in the required inputs</li>
+<li>Click <strong>Run Analysis</strong></li>
+</ol>
+<h3 id="via-plugin-system">Via Plugin System</h3>
+<pre><code class="language-typescript">const jobId = await pluginService.executePlugin('consurf-conservation', {
+  // Add parameters here
+});
+</code></pre>
+
+</body>
+</html>
