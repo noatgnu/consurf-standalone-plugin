@@ -200,7 +200,7 @@ execution:
 example:
   enabled: true
   values:
-    query_sequence: "example/Q52007.fasta.txt"
+    query_sequence: "example/Q5S007.fasta.txt"
     fasta_database: "example/LRRK2_Mammalia.txt"
     structure_file: "example/AF-Q5S007-F1-model_v6.pdb"
     query_name: "LRRK2_HUMAN"
