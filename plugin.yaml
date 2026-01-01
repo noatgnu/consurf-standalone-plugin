@@ -136,6 +136,7 @@ inputs:
     label: "PDB Chain ID"
     type: "text"
     required: false
+    default: "A"
     placeholder: "A"
     description: "Chain identifier in PDB file (e.g., A, B, C)"
 
@@ -203,6 +204,7 @@ example:
     query_sequence: "example/Q5S007.fasta.txt"
     fasta_database: "example/LRRK2_Mammalia.txt"
     structure_file: "example/AF-Q5S007-F1-model_v6.pdb"
+    chain: "A"
     query_name: "LRRK2_HUMAN"
     algorithm: "HMMER"
     max_homologs: 50
