@@ -1,7 +1,7 @@
 plugin:
   id: "consurf-conservation"
   name: "ConSurf Conservation Analysis"
-  description: "Protein sequence conservation analysis using ConSurf standalone. Identifies conserved and variable regions in protein sequences based on homology search and multiple sequence alignment."
+  description: "Protein sequence conservation analysis using ConSurf standalone. Identifies conserved and variable regions in protein sequences based on homology search and multiple sequence alignment. Based on: Ashkenazy et al. (2016) Nucleic Acids Res 44(W1):W344-W350. Repository: https://github.com/Rostlab/ConSurf"
   version: "1.0.0"
   author: "Toan Phung"
   category: "analysis"

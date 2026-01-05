@@ -21,7 +21,7 @@
 
 ## Description
 
-Protein sequence conservation analysis using ConSurf standalone. Identifies conserved and variable regions in protein sequences based on homology search and multiple sequence alignment.
+Protein sequence conservation analysis using ConSurf standalone. Identifies conserved and variable regions in protein sequences based on homology search and multiple sequence alignment. Based on: Ashkenazy et al. (2016) Nucleic Acids Res 44(W1):W344-W350. Repository: https://github.com/Rostlab/ConSurf
 
 ## Runtime
 
@@ -47,7 +47,7 @@ Protein sequence conservation analysis using ConSurf standalone. Identifies cons
 | `msa_file` | Multiple Sequence Alignment (Optional) | file | No | - | Always visible |
 | `alignment_program` | Alignment Program | select (MAFFT, MUSCLE, CLUSTALW) | No | - | Always visible |
 | `structure_file` | PDB Structure File (Optional) | file | No | - | Always visible |
-| `chain` | PDB Chain ID | text | No | - | Always visible |
+| `chain` | PDB Chain ID | text | No | A | Always visible |
 | `query_name` | Query Sequence Name | text | No | - | Always visible |
 
 ### Input Details
@@ -155,16 +155,19 @@ Custom name for the query sequence in outputs
 This plugin includes example data for testing:
 
 ```yaml
-  fasta_database: example/small_database.fasta
+  max_iterations: 1
+  chain: A
+  query_name: LRRK2_HUMAN
+  algorithm: HMMER
   max_homologs: 50
   substitution_model: BEST
+  maximum_likelihood: false
+  query_sequence: example/Q5S007.fasta.txt
+  fasta_database: example/LRRK2_Mammalia.txt
+  structure_file: example/AF-Q5S007-F1-model_v6.pdb
   max_id: 95
   min_id: 35
   cutoff: 0.0001
-  maximum_likelihood: false
-  query_sequence: example/query.fasta
-  algorithm: HMMER
-  max_iterations: 1
 ```
 
 Load example data by clicking the **Load Example** button in the UI.

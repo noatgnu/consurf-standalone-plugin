@@ -126,7 +126,7 @@
 <strong>Category</strong>: analysis<br>
 <strong>Author</strong>: Toan Phung</p>
 <h2 id="description">Description</h2>
-<p>Protein sequence conservation analysis using ConSurf standalone. Identifies conserved and variable regions in protein sequences based on homology search and multiple sequence alignment.</p>
+<p>Protein sequence conservation analysis using ConSurf standalone. Identifies conserved and variable regions in protein sequences based on homology search and multiple sequence alignment. Based on: Ashkenazy et al. (2016) Nucleic Acids Res 44(W1):W344-W350. Repository: <a href="https://github.com/Rostlab/ConSurf">https://github.com/Rostlab/ConSurf</a></p>
 <h2 id="runtime">Runtime</h2>
 <ul>
 <li>
@@ -266,7 +266,7 @@
 <td>PDB Chain ID</td>
 <td>text</td>
 <td>No</td>
-<td>-</td>
+<td>A</td>
 <td>Always visible</td>
 </tr>
 <tr>
@@ -375,16 +375,19 @@
 </ul>
 <h2 id="example-data">Example Data</h2>
 <p>This plugin includes example data for testing:</p>
-<pre><code class="language-yaml">  fasta_database: example/small_database.fasta
-  max_homologs: 50
+<pre><code class="language-yaml">  max_homologs: 50
   substitution_model: BEST
+  maximum_likelihood: false
+  query_sequence: example/Q5S007.fasta.txt
+  fasta_database: example/LRRK2_Mammalia.txt
+  structure_file: example/AF-Q5S007-F1-model_v6.pdb
   max_id: 95
   min_id: 35
   cutoff: 0.0001
-  maximum_likelihood: false
-  query_sequence: example/query.fasta
-  algorithm: HMMER
   max_iterations: 1
+  chain: A
+  query_name: LRRK2_HUMAN
+  algorithm: HMMER
 </code></pre>
 <p>Load example data by clicking the <strong>Load Example</strong> button in the UI.</p>
 <h2 id="usage">Usage</h2>
