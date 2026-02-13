@@ -1,0 +1,143 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "title": "ConSurf Conservation Analysis pipeline parameters",
+    "description": "Protein sequence conservation analysis using ConSurf standalone. Identifies conserved and variable regions in protein sequences based on homology search and multiple sequence alignment. Based on: Ashkenazy et al. (2016) Nucleic Acids Res 44(W1):W344-W350. Repository: https://github.com/Rostlab/ConSurf",
+    "type": "object",
+    "definitions": {
+        "plugin_parameters": {
+            "title": "Plugin parameters",
+            "description": "Parameters for the ConSurf Conservation Analysis plugin.",
+            "type": "object",
+            "properties": {
+                "algorithm": {
+                    "type": "string",
+                    "description": "Algorithm for searching homologous sequences",
+                    "default": "HMMER"
+                },
+                "alignment_program": {
+                    "type": "string",
+                    "description": "Program for multiple sequence alignment (used if MSA not provided)"
+                },
+                "chain": {
+                    "type": "string",
+                    "description": "Chain identifier in PDB file (e.g., A, B, C)",
+                    "default": "A"
+                },
+                "closest": {
+                    "type": "boolean",
+                    "description": "Select only the closest homologs based on similarity",
+                    "default": false
+                },
+                "cutoff": {
+                    "type": "number",
+                    "description": "E-value threshold for homolog search significance",
+                    "default": 0.0001
+                },
+                "fasta_database": {
+                    "type": "string",
+                    "description": "Database of protein sequences for homolog search (e.g., UniRef90, UniProt)",
+                    "format": "file-path"
+                },
+                "max_homologs": {
+                    "type": "number",
+                    "description": "Maximum number of homologous sequences to include in MSA",
+                    "default": 150
+                },
+                "max_id": {
+                    "type": "number",
+                    "description": "Maximum sequence identity threshold for homolog filtering",
+                    "default": 95
+                },
+                "max_iterations": {
+                    "type": "number",
+                    "description": "Number of PSI-BLAST iterations (if BLAST selected)",
+                    "default": 1
+                },
+                "maximum_likelihood": {
+                    "type": "boolean",
+                    "description": "Use maximum likelihood method for rate calculation (slower but more accurate)",
+                    "default": false
+                },
+                "min_id": {
+                    "type": "number",
+                    "description": "Minimum sequence identity threshold for homolog filtering",
+                    "default": 35
+                },
+                "msa_file": {
+                    "type": "string",
+                    "description": "Pre-computed MSA file. If provided, skips homolog search and alignment steps",
+                    "format": "file-path"
+                },
+                "query_name": {
+                    "type": "string",
+                    "description": "Custom name for the query sequence in outputs"
+                },
+                "query_sequence": {
+                    "type": "string",
+                    "description": "Protein sequence in FASTA format for conservation analysis",
+                    "format": "file-path"
+                },
+                "structure_file": {
+                    "type": "string",
+                    "description": "Protein structure file for mapping conservation to 3D structure",
+                    "format": "file-path"
+                },
+                "substitution_model": {
+                    "type": "string",
+                    "description": "Amino acid substitution model for conservation calculation",
+                    "default": "BEST"
+                }
+            }
+        }
+    },
+    "properties": {
+        "algorithm": {
+            "$ref": "#/definitions/plugin_parameters/properties/algorithm"
+        },
+        "alignment_program": {
+            "$ref": "#/definitions/plugin_parameters/properties/alignment_program"
+        },
+        "chain": {
+            "$ref": "#/definitions/plugin_parameters/properties/chain"
+        },
+        "closest": {
+            "$ref": "#/definitions/plugin_parameters/properties/closest"
+        },
+        "cutoff": {
+            "$ref": "#/definitions/plugin_parameters/properties/cutoff"
+        },
+        "fasta_database": {
+            "$ref": "#/definitions/plugin_parameters/properties/fasta_database"
+        },
+        "max_homologs": {
+            "$ref": "#/definitions/plugin_parameters/properties/max_homologs"
+        },
+        "max_id": {
+            "$ref": "#/definitions/plugin_parameters/properties/max_id"
+        },
+        "max_iterations": {
+            "$ref": "#/definitions/plugin_parameters/properties/max_iterations"
+        },
+        "maximum_likelihood": {
+            "$ref": "#/definitions/plugin_parameters/properties/maximum_likelihood"
+        },
+        "min_id": {
+            "$ref": "#/definitions/plugin_parameters/properties/min_id"
+        },
+        "msa_file": {
+            "$ref": "#/definitions/plugin_parameters/properties/msa_file"
+        },
+        "query_name": {
+            "$ref": "#/definitions/plugin_parameters/properties/query_name"
+        },
+        "query_sequence": {
+            "$ref": "#/definitions/plugin_parameters/properties/query_sequence"
+        },
+        "structure_file": {
+            "$ref": "#/definitions/plugin_parameters/properties/structure_file"
+        },
+        "substitution_model": {
+            "$ref": "#/definitions/plugin_parameters/properties/substitution_model"
+        }
+    }
+}
