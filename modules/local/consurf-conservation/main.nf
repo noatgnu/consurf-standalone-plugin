@@ -38,16 +38,28 @@ process CONSURF_CONSERVATION {
     ARG_LIST=()
 
     
-    # Mapping for cutoff
-    VAL="$cutoff"
+    # Mapping for substitution_model
+    VAL="$substitution_model"
     if [ -n "\$VAL" ] && [ "\$VAL" != "null" ] && [ "\$VAL" != "[]" ]; then
-        ARG_LIST+=("--cutoff" "\$VAL")
+        ARG_LIST+=("--model" "\$VAL")
     fi
     
-    # Mapping for query_name
-    VAL="$query_name"
+    # Mapping for msa_file
+    VAL="$msa_file"
     if [ -n "\$VAL" ] && [ "\$VAL" != "null" ] && [ "\$VAL" != "[]" ]; then
-        ARG_LIST+=("--query" "\$VAL")
+        ARG_LIST+=("--msa" "\$VAL")
+    fi
+    
+    # Mapping for alignment_program
+    VAL="$alignment_program"
+    if [ -n "\$VAL" ] && [ "\$VAL" != "null" ] && [ "\$VAL" != "[]" ]; then
+        ARG_LIST+=("--align" "\$VAL")
+    fi
+    
+    # Mapping for chain
+    VAL="$chain"
+    if [ -n "\$VAL" ] && [ "\$VAL" != "null" ] && [ "\$VAL" != "[]" ]; then
+        ARG_LIST+=("--chain" "\$VAL")
     fi
     
     # Mapping for structure_file
@@ -62,10 +74,40 @@ process CONSURF_CONSERVATION {
         ARG_LIST+=("--algorithm" "\$VAL")
     fi
     
+    # Mapping for max_homologs
+    VAL="$max_homologs"
+    if [ -n "\$VAL" ] && [ "\$VAL" != "null" ] && [ "\$VAL" != "[]" ]; then
+        ARG_LIST+=("--MAX_HOMOLOGS" "\$VAL")
+    fi
+    
     # Mapping for min_id
     VAL="$min_id"
     if [ -n "\$VAL" ] && [ "\$VAL" != "null" ] && [ "\$VAL" != "[]" ]; then
         ARG_LIST+=("--MIN_ID" "\$VAL")
+    fi
+    
+    # Mapping for cutoff
+    VAL="$cutoff"
+    if [ -n "\$VAL" ] && [ "\$VAL" != "null" ] && [ "\$VAL" != "[]" ]; then
+        ARG_LIST+=("--cutoff" "\$VAL")
+    fi
+    
+    # Mapping for max_iterations
+    VAL="$max_iterations"
+    if [ -n "\$VAL" ] && [ "\$VAL" != "null" ] && [ "\$VAL" != "[]" ]; then
+        ARG_LIST+=("--iterations" "\$VAL")
+    fi
+    
+    # Mapping for query_name
+    VAL="$query_name"
+    if [ -n "\$VAL" ] && [ "\$VAL" != "null" ] && [ "\$VAL" != "[]" ]; then
+        ARG_LIST+=("--query" "\$VAL")
+    fi
+    
+    # Mapping for query_sequence
+    VAL="$query_sequence"
+    if [ -n "\$VAL" ] && [ "\$VAL" != "null" ] && [ "\$VAL" != "[]" ]; then
+        ARG_LIST+=("--seq" "\$VAL")
     fi
     
     # Mapping for closest
@@ -74,12 +116,6 @@ process CONSURF_CONSERVATION {
         if [ "\$VAL" = "true" ]; then
             ARG_LIST+=("--closest")
         fi
-    fi
-    
-    # Mapping for query_sequence
-    VAL="$query_sequence"
-    if [ -n "\$VAL" ] && [ "\$VAL" != "null" ] && [ "\$VAL" != "[]" ]; then
-        ARG_LIST+=("--seq" "\$VAL")
     fi
     
     # Mapping for fasta_database
@@ -94,48 +130,12 @@ process CONSURF_CONSERVATION {
         ARG_LIST+=("--MAX_ID" "\$VAL")
     fi
     
-    # Mapping for msa_file
-    VAL="$msa_file"
-    if [ -n "\$VAL" ] && [ "\$VAL" != "null" ] && [ "\$VAL" != "[]" ]; then
-        ARG_LIST+=("--msa" "\$VAL")
-    fi
-    
-    # Mapping for max_homologs
-    VAL="$max_homologs"
-    if [ -n "\$VAL" ] && [ "\$VAL" != "null" ] && [ "\$VAL" != "[]" ]; then
-        ARG_LIST+=("--MAX_HOMOLOGS" "\$VAL")
-    fi
-    
-    # Mapping for substitution_model
-    VAL="$substitution_model"
-    if [ -n "\$VAL" ] && [ "\$VAL" != "null" ] && [ "\$VAL" != "[]" ]; then
-        ARG_LIST+=("--model" "\$VAL")
-    fi
-    
-    # Mapping for max_iterations
-    VAL="$max_iterations"
-    if [ -n "\$VAL" ] && [ "\$VAL" != "null" ] && [ "\$VAL" != "[]" ]; then
-        ARG_LIST+=("--iterations" "\$VAL")
-    fi
-    
     # Mapping for maximum_likelihood
     VAL="$maximum_likelihood"
     if [ -n "\$VAL" ] && [ "\$VAL" != "null" ] && [ "\$VAL" != "[]" ]; then
         if [ "\$VAL" = "true" ]; then
             ARG_LIST+=("--Maximum_Likelihood")
         fi
-    fi
-    
-    # Mapping for alignment_program
-    VAL="$alignment_program"
-    if [ -n "\$VAL" ] && [ "\$VAL" != "null" ] && [ "\$VAL" != "[]" ]; then
-        ARG_LIST+=("--align" "\$VAL")
-    fi
-    
-    # Mapping for chain
-    VAL="$chain"
-    if [ -n "\$VAL" ] && [ "\$VAL" != "null" ] && [ "\$VAL" != "[]" ]; then
-        ARG_LIST+=("--chain" "\$VAL")
     fi
     
     /opt/miniconda/bin/conda run -n consurf_env --no-capture-output python /workspace/stand_alone_consurf/stand_alone_consurf.py \

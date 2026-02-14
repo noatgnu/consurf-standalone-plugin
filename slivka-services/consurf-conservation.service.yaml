@@ -195,16 +195,16 @@ execution:
 tests:
   - applicable-runners: ["default"]
     parameters:
-      min_id: 35
+      query_sequence: example/Q5S007.fasta.txt
       structure_file: example/AF-Q5S007-F1-model_v6.pdb
-      algorithm: HMMER
-      cutoff: 0.0001
+      chain: A
+      max_homologs: 50
+      max_id: 95
+      min_id: 35
       max_iterations: 1
       maximum_likelihood: false
-      query_sequence: example/Q5S007.fasta.txt
       fasta_database: example/LRRK2_Mammalia.txt
-      chain: A
       query_name: LRRK2_HUMAN
-      max_homologs: 50
+      algorithm: HMMER
       substitution_model: BEST
-      max_id: 95
+      cutoff: 0.0001

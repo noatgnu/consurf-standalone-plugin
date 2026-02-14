@@ -156,19 +156,19 @@ jobs:
         run: |
           cd slivka-project
           JOB_RESPONSE=$(curl -s -X POST http://localhost:8000/api/services/consurf-conservation/jobs \
-            -F "query_sequence=@testdata/Q5S007.fasta.txt" \
-            -F "fasta_database=@testdata/LRRK2_Mammalia.txt" \
-            -F "chain=A" \
-            -F "query_name=LRRK2_HUMAN" \
             -F "max_homologs=50" \
-            -F "substitution_model=BEST" \
             -F "max_id=95" \
             -F "min_id=35" \
-            -F "structure_file=@testdata/AF-Q5S007-F1-model_v6.pdb" \
-            -F "algorithm=HMMER" \
-            -F "cutoff=0.0001" \
             -F "max_iterations=1" \
-            -F "maximum_likelihood=false")
+            -F "maximum_likelihood=false" \
+            -F "fasta_database=@testdata/LRRK2_Mammalia.txt" \
+            -F "query_name=LRRK2_HUMAN" \
+            -F "algorithm=HMMER" \
+            -F "substitution_model=BEST" \
+            -F "cutoff=0.0001" \
+            -F "query_sequence=@testdata/Q5S007.fasta.txt" \
+            -F "structure_file=@testdata/AF-Q5S007-F1-model_v6.pdb" \
+            -F "chain=A")
 
           JOB_ID=$(echo $JOB_RESPONSE | python -c "import sys,json; print(json.load(sys.stdin)['id'])")
           echo "Job ID: $JOB_ID"
