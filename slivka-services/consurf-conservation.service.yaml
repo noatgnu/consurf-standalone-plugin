@@ -1,0 +1,210 @@
+# Slivka service configuration for consurf-conservation
+# Generated from Cauldron plugin format
+#
+# For file inputs that reference large databases (e.g., FASTA databases),
+# consider configuring them as environment variables pointing to shared storage:
+#   env:
+#     DATABASE_PATH: "${SLIVKA_HOME}/databases/uniref90.fasta"
+# Then reference in args as: arg: "--db=${DATABASE_PATH}"
+
+slivka-version: "0.8"
+name: consurf-conservation
+description: Protein sequence conservation analysis using ConSurf standalone. Identifies conserved and variable regions in protein sequences based on homology search and multiple sequence alignment. Based on: Ashkenazy et al. (2016) Nucleic Acids Res 44(W1):W344-W350. Repository: https://github.com/Rostlab/ConSurf
+author: Toan Phung
+version: "1.0.0"
+license: MIT
+classifiers:
+  - "Topic :: Scientific/Engineering :: Bio-Informatics"
+
+parameters:
+  query_sequence:
+    name: "Query Protein Sequence"
+    description: "Protein sequence in FASTA format for conservation analysis"
+    type: file
+    required: true
+    media-type: application/fasta
+  fasta_database:
+    name: "Protein FASTA Database"
+    description: "Database of protein sequences for homolog search (e.g., UniRef90, UniProt)"
+    type: file
+    required: true
+    media-type: application/fasta
+  algorithm:
+    name: "Homolog Search Algorithm"
+    description: "Algorithm for searching homologous sequences"
+    type: choice
+    required: true
+    default: HMMER
+    choices:
+      - HMMER
+      - BLAST
+  max_homologs:
+    name: "Maximum Homologs"
+    description: "Maximum number of homologous sequences to include in MSA"
+    type: float
+    required: true
+    default: 150
+    min: 10
+    max: 500
+  substitution_model:
+    name: "Substitution Model"
+    description: "Amino acid substitution model for conservation calculation"
+    type: choice
+    required: true
+    default: BEST
+    choices:
+      - BEST
+      - JTT
+      - LG
+      - WAG
+      - cpREV
+      - mtREV
+      - Dayhoff
+  max_id:
+    name: "Maximum Sequence Identity (%)"
+    description: "Maximum sequence identity threshold for homolog filtering"
+    type: float
+    required: true
+    default: 95
+    min: 50
+    max: 100
+  min_id:
+    name: "Minimum Sequence Identity (%)"
+    description: "Minimum sequence identity threshold for homolog filtering"
+    type: float
+    required: true
+    default: 35
+    min: 1
+    max: 50
+  cutoff:
+    name: "E-value Cutoff"
+    description: "E-value threshold for homolog search significance"
+    type: float
+    required: true
+    default: 0.0001
+    min: 1e-05
+    max: 1
+  max_iterations:
+    name: "Maximum Iterations"
+    description: "Number of PSI-BLAST iterations (if BLAST selected)"
+    type: float
+    required: true
+    default: 1
+    min: 1
+    max: 5
+  maximum_likelihood:
+    name: "Use Maximum Likelihood"
+    description: "Use maximum likelihood method for rate calculation (slower but more accurate)"
+    type: boolean
+    default: false
+  closest:
+    name: "Use Closest Homologs Only"
+    description: "Select only the closest homologs based on similarity"
+    type: boolean
+    default: false
+  msa_file:
+    name: "Multiple Sequence Alignment (Optional)"
+    description: "Pre-computed MSA file. If provided, skips homolog search and alignment steps"
+    type: file
+    media-type: application/fasta
+  alignment_program:
+    name: "Alignment Program"
+    description: "Program for multiple sequence alignment (used if MSA not provided)"
+    type: choice
+    choices:
+      - MAFFT
+      - MUSCLE
+      - CLUSTALW
+  structure_file:
+    name: "PDB Structure File (Optional)"
+    description: "Protein structure file for mapping conservation to 3D structure"
+    type: file
+    media-type: chemical/x-pdb
+  chain:
+    name: "PDB Chain ID"
+    description: "Chain identifier in PDB file (e.g., A, B, C)"
+    type: text
+    default: A
+  query_name:
+    name: "Query Sequence Name"
+    description: "Custom name for the query sequence in outputs"
+    type: text
+
+command:
+  - /opt/miniconda/bin/conda run -n consurf_env --no-capture-output python /workspace/stand_alone_consurf/stand_alone_consurf.py
+
+args:
+  query_sequence:
+    arg: "--seq=$(value)"
+    symlink: "query_sequence"
+  fasta_database:
+    arg: "--DB=$(value)"
+    symlink: "fasta_database"
+  algorithm:
+    arg: "--algorithm=$(value)"
+  max_homologs:
+    arg: "--MAX_HOMOLOGS=$(value)"
+  substitution_model:
+    arg: "--model=$(value)"
+  max_id:
+    arg: "--MAX_ID=$(value)"
+  min_id:
+    arg: "--MIN_ID=$(value)"
+  cutoff:
+    arg: "--cutoff=$(value)"
+  max_iterations:
+    arg: "--iterations=$(value)"
+  maximum_likelihood:
+    arg: "--Maximum_Likelihood"
+    condition: "$(value)"
+  closest:
+    arg: "--closest"
+    condition: "$(value)"
+  msa_file:
+    arg: "--msa=$(value)"
+    symlink: "msa_file"
+  alignment_program:
+    arg: "--align=$(value)"
+  structure_file:
+    arg: "--structure=$(value)"
+    symlink: "structure_file"
+  chain:
+    arg: "--chain=$(value)"
+  query_name:
+    arg: "--query=$(value)"
+  _output_dir:
+    arg: "--dir=."
+
+outputs:
+  consurf_outputs:
+    path: "Consurf_Outputs.zip"
+  conservation_grades:
+    path: "*_consurf_grades.txt"
+    media-type: text/plain
+  msa_variety:
+    path: "msa_aa_variety_percentage.csv"
+    media-type: text/csv
+  query_copy:
+    path: "query.fasta"
+
+execution:
+  runners:
+    default:
+      type: SlivkaQueueRunner
+
+tests:
+  - applicable-runners: ["default"]
+    parameters:
+      min_id: 35
+      structure_file: example/AF-Q5S007-F1-model_v6.pdb
+      algorithm: HMMER
+      cutoff: 0.0001
+      max_iterations: 1
+      maximum_likelihood: false
+      query_sequence: example/Q5S007.fasta.txt
+      fasta_database: example/LRRK2_Mammalia.txt
+      chain: A
+      query_name: LRRK2_HUMAN
+      max_homologs: 50
+      substitution_model: BEST
+      max_id: 95
